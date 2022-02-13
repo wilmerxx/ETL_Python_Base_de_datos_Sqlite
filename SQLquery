@@ -1,0 +1,14 @@
+select * from dim_albums;
+select * from dim_artists;
+select * from dim_customer;
+select * from dim_employees;
+select * from dim_genres;
+select * from dim_invoice_items;
+select * from dim_playlist;
+
+
+-- dim_time(time_key, day, day_of_the_week,month,quarter,year) 
+--dim_location(location_key, street,)
+SELECT Title FROM albums;
+SELECT Name FROM artists;
+SELECT Name AS Name_genres FROM genres;

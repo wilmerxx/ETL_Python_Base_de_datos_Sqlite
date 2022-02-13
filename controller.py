@@ -17,29 +17,16 @@ def extraer_database(path):
 
     return motorDB, conectarDB
 
+def extraer_database_nueva(path):
+    
+    motorDB_nueva = sqlalchemy.create_engine(path)
+    conectarDB_nueva = motorDB_nueva.connect()
+
+    return motorDB_nueva, conectarDB_nueva
+
 def extraer_tabla_a_pandas(conectarDB):
 
-    query = '''SELECT C.FirstName AS [NOMBRE CLIENTE],
-                MAX(T.Name) AS [PISTA],
-                MAX(G.Name) AS [GENERO],
-                MIN(PL.Name) AS [LISTA DE REPRODUCIÓN MENOS ESCUCHADA],
-                COUNT(I.InvoiceId) AS [CANTIDAD DE FACTURAS],
-                AVG(I.InvoiceId) AS [PROMEDIO DE FACTURAS],
-                SUM(I.Total) AS TOTAL
-            FROM employees E
-                INNER JOIN customers C ON C.SupportRepId = E.EmployeeId
-                INNER JOIN invoices I ON I.CustomerId = C.CustomerId
-                INNER JOIN invoice_items IV ON IV.InvoiceId = I.InvoiceId
-                INNER JOIN tracks T ON T.TrackId = IV.TrackId
-                INNER JOIN media_types M ON M.MediaTypeId = T.MediaTypeId
-                INNER JOIN genres G ON G.GenreId = T.GenreId
-                INNER JOIN albums A ON A.AlbumId = T.AlbumId
-                INNER JOIN artists AR ON AR.ArtistId = A.ArtistId
-                INNER JOIN playlist_track P ON P.TrackId = T.TrackId
-                INNER JOIN playlists PL ON PL.PlaylistId = P.PlaylistId
-            GROUP BY 1
-            ORDER BY SUM(I.Total)  DESC
-            LIMIT 5;'''
+    query = '''select Name AS Name_genres from genres;'''
     result = conectarDB.execute(query)
 
     df = pd.DataFrame(result.fetchall())
@@ -79,12 +66,13 @@ def cargar_a_sql(datos, connectar, tabla_sqlite):
 
     # Procesamiento de completar los valores faltantes
 
-    datos.to_sql(tabla_sqlite, connectar, if_exists='fail')
+    datos.to_sql(tabla_sqlite, connectar, if_exists='append', index=False)
     connectar.close()
     return 'La carga ha terminado'
 
 if __name__ == '__main__':
     path = "sqlite:///chinook.db"
+    path2 = "sqlite:///DW_sale_Music.db"
     #ruta_destino = r'C:\Users\Usuario\Desktop\PROYECTO_MDB\consulta1.csv'
     # Extracción
     extraerBD = extraer_database(path)
@@ -98,10 +86,11 @@ if __name__ == '__main__':
     #transformar = transformar_rellenar_nulo(transformar)
 
     # carga de los datos
+    extraerNueva = extraer_database_nueva(path2)
     datos = extraer
-    conectar = extraerBD[1]
-    tabla_sqlite = "ETL"
+    conectarNuevo = extraerNueva[1]
+    tabla_sqlite = "dim_genres"
     nombre_tabla = "ETL.csv"
-    exportar_csv(nombre_tabla,datos)
-    cargar_a_sql(datos, conectar, tabla_sqlite)
+    #exportar_csv(nombre_tabla,datos)
+    cargar_a_sql(datos, conectarNuevo, tabla_sqlite)
     print(extraer)

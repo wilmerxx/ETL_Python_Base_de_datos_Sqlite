@@ -6,3 +6,13 @@
 *.pdb
 *.sqlite3
 *.dbs
+### Text ###
+*.doc
+*.docx
+*.log
+*.msg
+*.pages
+*.rtf
+*.txt
+*.wpd
+*.wps

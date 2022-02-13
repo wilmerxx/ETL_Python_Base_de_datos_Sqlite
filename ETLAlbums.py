@@ -1,11 +1,9 @@
 import sqlite3
 import numpy
 import glob
-from datetime import datetime
+import matplotlib.pyplot as plt
 import pandas as pd
 import sqlalchemy
-import matplotlib.pyplot as plt
-
 
 '''Procesos de ETL'''
 

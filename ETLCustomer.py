@@ -8,35 +8,30 @@ import pandas as pd
 import sqlalchemy
 
 '''Procesos de ETL'''
-
+#Conexion de la base de datos chinook.db
 def extraer_database(path):
-
     motorDB = sqlalchemy.create_engine(path)
     conectarDB = motorDB.connect()
-
     return motorDB, conectarDB
 
+#Conexion de la base de datos DW_sale_Music.db
 def extraer_database_nueva(path):
-    
     motorDB_nueva = sqlalchemy.create_engine(path)
     conectarDB_nueva = motorDB_nueva.connect()
-
     return motorDB_nueva, conectarDB_nueva
 
+#Extraer datos de la base de datos chinook
 def extraer_tabla_a_pandas(conectarDB):
 
     query = '''SELECT FirstName,LastName,Company,Address,City,State,Country,PostalCode,Phone,Fax,Email 
             FROM customers;'''
     result = conectarDB.execute(query)
-
     df = pd.DataFrame(result.fetchall())
     df.columns = result.keys()
-
     return df
 
-
+#Transformacion de datos nulos
 def transformar_rellenar_nulo(datos):
-
     # Procesamiento de completar los valores faltantes
     datos = datos.fillna({"FirstName": "NA","LastName": "NA","Company": "NA","Address": "NA","City": "NA","State": "NA","Country": "NA","PostalCode":"NA","Phone":"NA","Fax":"NA","Email":"NA"})
 

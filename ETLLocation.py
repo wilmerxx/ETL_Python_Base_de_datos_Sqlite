@@ -1,6 +1,3 @@
-import sqlite3
-import numpy
-import glob
 from datetime import datetime
 import pandas as pd
 import sqlalchemy

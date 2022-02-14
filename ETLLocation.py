@@ -25,7 +25,7 @@ def extraer_database_nueva(path):
 
 def extraer_tabla_a_pandas(conectarDB):
 
-    query = '''SELECT BillingAddress,BillingCity,BillingState,BillingCountry 
+    query = '''SELECT BillingAddress,BillingCity,BillingCountry 
                 FROM invoices;'''
     result = conectarDB.execute(query)
 
@@ -33,12 +33,6 @@ def extraer_tabla_a_pandas(conectarDB):
     df.columns = result.keys()
 
     return df
-
-def transformar_rellenar_nulo(datos):
-
-    # Procesamiento de completar los valores faltantes
-    datos = datos.fillna({"BillingState": "NA"})
-    return datos
 
 
 def cargar_a_sql(datos, connectar, tabla_sqlite):
@@ -60,12 +54,9 @@ if __name__ == '__main__':
     engine = extraerBD[0]
     extraer = extraer_tabla_a_pandas(engine)
 
-    # Transformación
-    transformar = transformar_rellenar_nulo(extraer)
-
     # carga de los datos
     extraerNueva = extraer_database_nueva(path2)
-    datos = transformar
+    datos = extraer
     conectarNuevo = extraerNueva[1]
     tabla_sqlite = "dim_location"
     cargar_a_sql(datos, conectarNuevo, tabla_sqlite)

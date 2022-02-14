@@ -5,6 +5,7 @@ La base de datos es creada en SQLite y se utilizan dos que son:
 - DW_sale_Music "a la que se va a enviar los datos" 
 
 ###### Dimensiones de la base de datos DW_sale_Music.db
+ En los atributos para la dimensión dim_location son: "BillingAddress, BillingCity, BillingCountry"
 1. dim_albums
 2. dim_artists
 3. dim_customer
